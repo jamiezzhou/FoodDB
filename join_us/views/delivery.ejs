@@ -11,7 +11,7 @@
         <div class="col-md-9 col-lg-6">
           <div class="login-wrap">
             <h3 class="mb-4 text-center">Make Delivery</h3>
-            <form action="#" class="signup-form">
+            <form action="/delivery_request" method = "POST" class="signup-form">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group mb-4">
@@ -31,6 +31,24 @@
                     />
                   </div>
                 </div>
+                <div class="col-md-8">
+                  <div class="form-group mb-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Resetaurant ID (Find in homepage)"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group mb-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Address"
+                    />
+                  </div>
+                </div>
                 <div class="col-md-12">
                   <div class="form-group mb-4">
                     <input
@@ -40,12 +58,62 @@
                     />
                   </div>
                 </div>
+                <span class="form-label">Food Selection (Please find food IDs in restaurant menu at homepage)</span>
                 <div class="col-md-6">
                   <div class="form-group mb-4">
                     <input
-                      type="password"
+                      type="text"
                       class="form-control"
-                      placeholder="Food ids"
+                      placeholder="Food id1"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-4">
+                    <span class="form-label"></span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Food id2"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Food id3"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Food id4"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-4">
+                    <span class="form-label">Explected Delivery Time</span>
+                    <p> Date.now()</p>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Delivery Time"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-4">
+                    <span class="form-label">Total Fees (all fees included)</span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Fees"
                     />
                   </div>
                 </div>

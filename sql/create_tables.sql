@@ -110,8 +110,6 @@ CREATE TABLE delivery(
     dlvy_num CHAR(9) NOT NULL,
     dlvy_time DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 30 MINUTE),
     res_id CHAR(9) NOT NULL,
-    res_name VARCHAR(20) NOT NULL,
-    res_address VARCHAR(100) NOT NULL,
     fee DECIMAL(6,2) NOT NULL,
     instructions VARCHAR(100),
     buyer_name VARCHAR(20) NOT NULL,

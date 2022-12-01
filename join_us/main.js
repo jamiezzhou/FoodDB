@@ -41,87 +41,95 @@ app.get("/homepage", function(req, res){
 });
 
 app.get("/delivery", function(req, res){
+    // var q = 'SELECT COUNT(*) As count FROM users';
+    // connection.query(q, function(err, results){
+    //     if (err) throw err;
+    //     var count = results[0].count;
+    //     //res.send('We have ' + count + " uesrs in our db");
+    //     res.render("home", {data: count});
+    // });
     res.render("delivery");
 });
 
-app.post("/register", function(req, res){
-    // console.log(req.body);
-    var user = {
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        phone: req.body.phone
-    };
+app.post("/insert", function(req, res){
+    // if(post.submit){
+        var user = {
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            phone: req.body.phone
+        };
 
-    var payment = {
-        username: req.body.username,
-        card_num: req.body.cardnum,
-        security_num: req.body.securitynum,
-        expir_date: req.body.expirdate
-    }
-    
-    var insert_user = 'INSERT INTO user SET ?';
-    var insert_payment = 'INSERT INTO payment SET ?';
-    const userKeyRegExp = /^([0-9]{2}\-[0-9]{2})$/;
+        var payment = {
+            username: req.body.username,
+            card_num: req.body.cardnum,
+            security_num: req.body.securitynum,
+            expir_date: req.body.expirdate
+        }
+        
+        var insert_user = 'INSERT INTO user SET ?';
+        var insert_payment = 'INSERT INTO payment SET ?';
+        const userKeyRegExp = /^([0-9]{2}\-[0-9]{2})$/;
 
-    if (user.password != req.body.confirmpass){
-        console.log("Password don't match.");
-    }
-    else if (user.password.length < 6 || user.password.length > 19){
-        console.log("Please input a password that is 5-20 characters long");
-    }
-    else if (user.phone.length != 10){
-        console.log("Please input a proper phone number.");
-    }
-    else if (user.username == "" || user.password == "" || user.phone == ""){
-        console.log("Plese do not leave required fields (*) blanck");
-    }
-    else if(payment.card_num != "" && payment.card_num.length!= 16){
-        console.log("Please input a proper card number.");
-    }
-    else if (payment.card_num != "" && payment.security_num.length != 3){
-        console.log("Please input a proper securitynum.");
-    }
-    else if (payment.card_num != "" && !userKeyRegExp.test(payment.expir_date)){
-        console.log("Please input the expiration date in the format Month-Year, e.g. 01-22");
-    }
-    else if (payment.card_num != "" && (payment.expir_date == "" || payment.security_num == "")){
-        console.log("Plese do not leave security num or expiration date blank");
-    }
-    else{
-        connection.query(insert_user, user, function(error, result) {
-            // console.log(error.errno);
-            if (!error){
-                // valid = true;
-                console.log("Valid user added");
-                if (payment.card_num == ""){
-                    console.log("Successfully logged in");
-                    res.redirect("/homepage");
-                }
-            }
-            else if (error.errno == 1062){
-                console.log("Username taken");
-            } else {
-                throw error;
-            }
-        });
-
-        if(payment.card_num != ""){
-            connection.query(insert_payment, payment, function(error, result) {
-                console.log(error);
+        if (user.password != req.body.confirmpass){
+            console.log("Password don't match.");
+        }
+        else if (user.password.length < 6 || user.password.length > 19){
+            console.log("Please input a password that is 5-20 characters long");
+        }
+        else if (user.phone.length != 10){
+            console.log("Please input a proper phone number.");
+        }
+        else if (user.username == "" || user.password == "" || user.phone == ""){
+            console.log("Plese do not leave required fields (*) blanck");
+        }
+        else if(payment.card_num != "" && payment.card_num.length!= 16){
+            console.log("Please input a proper card number.");
+        }
+        else if (payment.card_num != "" && payment.security_num.length != 3){
+            console.log("Please input a proper securitynum.");
+        }
+        else if (payment.card_num != "" && !userKeyRegExp.test(payment.expir_date)){
+            console.log("Please input the expiration date in the format Month-Year, e.g. 01-22");
+        }
+        else if (payment.card_num != "" && (payment.expir_date == "" || payment.security_num == "")){
+            console.log("Plese do not leave security num or expiration date blank");
+        }
+        else{
+            connection.query(insert_user, user, function(error, result) {
+                // console.log(error.errno);
                 if (!error){
-                    console.log("Payment added to user");
-                    console.log("Successfully logged in");
-                    res.redirect("/homepage");
+                    // valid = true;
+                    console.log("Valid user added");
+                    if (payment.card_num == ""){
+                        console.log("Successfully logged in");
+                        res.redirect("/homepage");
+                    }
                 }
                 else if (error.errno == 1062){
-                    console.log("Payment previously added");
+                    console.log("Username taken");
                 } else {
                     throw error;
                 }
             });
+
+            if(payment.card_num != ""){
+                connection.query(insert_payment, payment, function(error, result) {
+                    console.log(error);
+                    if (!error){
+                        console.log("Payment added to user");
+                        console.log("Successfully logged in");
+                        res.redirect("/homepage");
+                    }
+                    else if (error.errno == 1062){
+                        console.log("Payment previously added");
+                    } else {
+                        throw error;
+                    }
+                });
+            }
         }
-    }
+    // }
     
 });
 
