@@ -72,28 +72,28 @@ app.post("/insert", function(req, res){
         const userKeyRegExp = /^([0-9]{2}\-[0-9]{2})$/;
 
         if (user.password != req.body.confirmpass){
-            console.log("Password don't match.");
+            res.send("Password don't match.");
         }
         else if (user.password.length < 6 || user.password.length > 19){
-            console.log("Please input a password that is 5-20 characters long");
+            res.send("Please input a password that is 5-20 characters long");
         }
         else if (user.phone.length != 10){
-            console.log("Please input a proper phone number.");
+            res.send("Please input a proper phone number.");
         }
         else if (user.username == "" || user.password == "" || user.phone == ""){
-            console.log("Plese do not leave required fields (*) blanck");
+            res.send("Plese do not leave required fields (*) blanck");
         }
         else if(payment.card_num != "" && payment.card_num.length!= 16){
-            console.log("Please input a proper card number.");
+            res.send("Please input a proper card number.");
         }
         else if (payment.card_num != "" && payment.security_num.length != 3){
-            console.log("Please input a proper securitynum.");
+            res.send("Please input a proper securitynum.");
         }
         else if (payment.card_num != "" && !userKeyRegExp.test(payment.expir_date)){
-            console.log("Please input the expiration date in the format Month-Year, e.g. 01-22");
+            res.send("Please input the expiration date in the format Month-Year, e.g. 01-22");
         }
         else if (payment.card_num != "" && (payment.expir_date == "" || payment.security_num == "")){
-            console.log("Plese do not leave security num or expiration date blank");
+            res.send("Plese do not leave security num or expiration date blank");
         }
         else{
             connection.query(insert_user, user, function(error, result) {
@@ -107,7 +107,7 @@ app.post("/insert", function(req, res){
                     }
                 }
                 else if (error.errno == 1062){
-                    console.log("Username taken");
+                    res.send("Username taken");
                 } else {
                     throw error;
                 }
@@ -122,7 +122,7 @@ app.post("/insert", function(req, res){
                         res.redirect("/homepage");
                     }
                     else if (error.errno == 1062){
-                        console.log("Payment previously added");
+                        res.send("Payment previously added");
                     } else {
                         throw error;
                     }
@@ -139,7 +139,7 @@ app.post("/delete", function(req, res){
     var delete_user = 'DELETE FROM user WHERE username = ?';
 
     if (req.body.password == ""){
-        console.log("Type DELETE in the password field to confirm deletion");
+        res.send("Type DELETE in the password field to confirm deletion");
     }
     else if (req.body.password == "DELETE"){
         connection.query(delete_user, username, function(error, result) {
@@ -158,28 +158,28 @@ app.post("/update", function(req, res){
     u = req.body.username;
 
     if(u == ""){
-        console.log("Please input the username you would like to update");
+        res.send("Please input the username you would like to update");
     }
     else{
     
         if (req.body.password != ""){
             connection.query(update_pass, [req.body.password, u], function(error, result) {
                 if (error) throw error;
-                console.log("Password updated");
+                res.send("Password updated");
             });
         }
 
         if (req.body.email != ""){
             connection.query(update_email, [req.body.email, u], function(error, result) {
                 if (error) throw error;
-                console.log("Email updated");
+                res.send("Email updated");
             });
         }
 
         if (req.body.phone != ""){
             connection.query(update_phone, [req.body.phone, u], function(error, result) {
                 if (error) throw error;
-                console.log("Phone updated");
+                res.send("Phone updated");
             });
         }
     }
