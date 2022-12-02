@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require("body-parser");
 var mysql = require('mysql2');
+const { address } = require('faker/lib/locales/az');
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -16,39 +17,84 @@ var connection = mysql.createConnection({
 });
 
 app.get("/", function(req,res){
-    // //Find count of users in DB
-    // var q = 'SELECT COUNT(*) As count FROM users';
-    // connection.query(q, function(err, results){
-    //     if (err) throw err;
-    //     var count = results[0].count;
-    //     //res.send('We have ' + count + " uesrs in our db");
-    //     res.render("home", {data: count});
-    // });
-    // console.log('SOMEONE REQUESTED US!');
-    // res.send("You've reached the Home Page!");
     res.render("account");
 });
-
-// app.get("/", function (req, res) {
-    // var joke = "What do you call a dog that does magic tricks? A labracadabrador.";
-    // res.send(joke);
-//     console.log('SOMEONE REQUESTED US!');
-//     res.send("You've reached the Home Page!");
-// });
 
 app.get("/homepage", function(req, res){
     res.render("homepage");
 });
 
 app.get("/delivery", function(req, res){
-    // var q = 'SELECT COUNT(*) As count FROM users';
-    // connection.query(q, function(err, results){
-    //     if (err) throw err;
-    //     var count = results[0].count;
-    //     //res.send('We have ' + count + " uesrs in our db");
-    //     res.render("home", {data: count});
-    // });
-    res.render("delivery");
+    res.render("delivery", {data: "UpdatedAfterConfirmation"});
+});
+
+var delivery = null;
+app.post("/deliveryconfirm", function(req, res){
+    console.log("delivery_request");
+    rest_id = req.body.rest_id;
+    // console.log(rest_id);
+
+    console.log(req.body.dlvy_time)
+    delivery = {
+        dlvy_num: Math.floor(Math.random() * 1000000000),
+        dlvy_time: req.body.dlvy_time,
+        res_id: rest_id,
+        res_name: null,
+        res_address: null,
+        fee: null,
+        instructions: req.body.instruct,
+        buyer_name: req.body.username,
+        buyer_address: req.body.address,
+        buyer_contact: req.body.phone
+    };
+
+    var select_rest = "SELECT name, address FROM restaurant WHERE id=?"
+    connection.query(select_rest, rest_id, function (error, result) {
+        if (error) throw error;
+        console.log(result[0]);
+        rest_name = result[0].name;
+        rest_address = result[0].address;
+        setValue(rest_name, rest_address);
+    });
+
+    function setValue(n, a) {
+        delivery.res_name = n
+        delivery.res_address = a;
+        console.log(delivery);
+
+        f1 = req.body.food1;
+        f2 = req.body.food2;
+        f3 = req.body.food3;
+        f4 = req.body.food4;
+
+        var select_food = "SELECT SUM(food_price) AS p FROM food WHERE (food_id=? or food_id=? or food_id=? or food_id=?) and (res_id=?)"
+        connection.query(select_food, [f1,f2,f3,f4,rest_id], function (error, result) {
+            if (error) throw error;
+            value = result[0].p;
+            setPrice(value);
+        });
+
+        function setPrice(v) {
+            delivery.fee = v;
+            console.log(delivery.fee);
+            res.render("delivery", {data: v});
+        }
+    }
+});
+
+app.post("/deliveryreturn", function(req,res){
+    res.render("homepage");
+});
+
+app.post("/deliveryrequest", function (req, res) {
+    console.log(delivery);
+    var insert_delivery = 'INSERT INTO delivery SET ?';
+    if(delivery != null){
+        connection.query(insert_delivery, delivery, function (error, result) {
+            if (error) throw error;
+            res.send("Delivery inserted");
+        });
+    }
 });
 
 app.post("/insert", function(req, res){
