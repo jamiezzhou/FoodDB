@@ -6,17 +6,18 @@
 </head>
 <body>
   <section class="ftco-section">
+    <form method = "POST" action="/deliveryrequest" class="signup-form" enctype="application/json">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-9 col-lg-6">
           <div class="login-wrap">
             <h3 class="mb-4 text-center">Make Delivery</h3>
-            <form action="/delivery_request" method = "POST" class="signup-form">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="username"
                       class="form-control"
                       placeholder="Username"
                     />
@@ -26,6 +27,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="phone"
                       class="form-control"
                       placeholder="Phone Number"
                     />
@@ -35,6 +37,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="rest_id"
                       class="form-control"
                       placeholder="Resetaurant ID (Find in homepage)"
                     />
@@ -44,6 +47,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="address"
                       class="form-control"
                       placeholder="Address"
                     />
@@ -53,6 +57,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="instruct"
                       class="form-control"
                       placeholder="Instructions"
                     />
@@ -63,6 +68,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="food1"
                       class="form-control"
                       placeholder="Food id1"
                     />
@@ -73,6 +79,7 @@
                     <span class="form-label"></span>
                     <input
                       type="text"
+                      name="food2"
                       class="form-control"
                       placeholder="Food id2"
                     />
@@ -82,6 +89,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="food3"
                       class="form-control"
                       placeholder="Food id3"
                     />
@@ -91,6 +99,7 @@
                   <div class="form-group mb-4">
                     <input
                       type="text"
+                      name="food4"
                       class="form-control"
                       placeholder="Food id4"
                     />
@@ -99,19 +108,35 @@
                 <div class="col-md-6">
                   <div class="form-group mb-4">
                     <span class="form-label">Explected Delivery Time</span>
-                    <p> Date.now()</p>
+                    <input
+                      type="text"
+                      name="dlvy_time"
+                      class="form-control"
+                      readonly = true
+                      value = <%= new Intl.DateTimeFormat('en-US', {
+                        hour: 'numeric', minute: 'numeric', second: 'numeric',
+                        hour12: false
+                      }).format(new Date(new Date - (-300 * 60 * 100))); %>
+                    />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group mb-4">
                     <span class="form-label">Total Fees (all fees included)</span>
-                    <p> Date.now()</p>
+                    <input
+                      type="text"
+                      name="fees"
+                      class="form-control"
+                      readonly = true
+                      value = <%= data %>
+                    />
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group mb-4">
                     <input
                       type="password"
+                      name="password"
                       class="form-control"
                       placeholder="Confirm Password"
                     />
@@ -121,18 +146,41 @@
                   <div class="form-group d-flex">
                     <button
                       type="submit"
+                      formaction = "/deliveryconfirm"
+                      class="btn btn-primary rounded submit p-3"
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group d-flex">
+                    <button
+                      type="submit"
+                      formaction = "/deliveryrequest"
                       class="btn btn-primary rounded submit p-3"
                     >
                       Request
                     </button>
                   </div>
                 </div>
+                <div class="col-md-12">
+                  <div class="form-group d-flex">
+                    <button
+                      type="submit"
+                      formaction = "/deliveryreturn"
+                      class="btn btn-primary rounded submit p-3"
+                    >
+                      Return to Homepage
+                    </button>
+                  </div>
+                </div>
                 </div>
               </div>
-            </form>
           </div>
         </div>
       </div>
     </div>
+  </form>
   </section>
 </body>
