@@ -51,6 +51,17 @@ app.get("/delivery", function (req, res) {
     res.render("delivery");
 });
 
+app.get("/reservation", function (req, res) {
+    // var q = 'SELECT COUNT(*) As count FROM users';
+    // connection.query(q, function(err, results){
+    //     if (err) throw err;
+    //     var count = results[0].count;
+    //     //res.send('We have ' + count + " uesrs in our db");
+    //     res.render("home", {data: count});
+    // });
+    res.render("reservation");
+});
+
 app.post("/insert", function (req, res) {
     // if(post.submit){
     var user = {
@@ -183,6 +194,46 @@ app.post("/update", function (req, res) {
             });
         }
     }
+});
+
+app.post("/make-reserve", function (req, res) {
+    // if(post.submit){
+    const resvID = '${Math.floor(Math.random()*1000000000)}';
+
+    var usr_reservation = {
+        hostname: req.body.hostname,
+        phone: req.body.phone,
+        restid: req.body.restid,
+        time: req.body.time,
+        request: req.body.request,
+        resvID: resvID
+    };
+    var insert_resv = 'INSERT INTO reservation SET ?';
+
+    if (user.hostname == "" || user.time == "" || user.phone == "") {
+        console.log("Please do not leave fields blank");
+    }
+    else if (user.phone.length != 10) {
+        console.log("Please input a proper phone number.");
+    }
+
+    else {
+        connection.query(insert_resv, function (err, result) {
+            // console.log(error.errno);
+            if (!err) {
+                console.log("Reservation created. Reservation ID ${resvID}");
+            }
+            else if (err.code === 'ER_DUP_ENTRY') {
+                console.log("generated reserve ID already exists, please request the reservation again");
+            }
+            // hasn't dealt with wrong restaurant ID
+            else {
+                throw error;
+            }
+        });
+
+    }
+
 });
 
 app.listen(8080, function () {
