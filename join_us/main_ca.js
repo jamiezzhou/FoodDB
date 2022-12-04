@@ -228,7 +228,7 @@ app.post("/make-reserve", function (req, res) {
             }
             // hasn't dealt with wrong restaurant ID
             else {
-                throw error;
+                throw err;
             }
         });
 
