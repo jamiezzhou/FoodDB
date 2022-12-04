@@ -110,7 +110,7 @@ CREATE TABLE payment(
 
 CREATE TABLE delivery(
     dlvy_num CHAR(9) NOT NULL,
-    dlvy_time DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 30 MINUTE),
+    dlvy_time TIME NOT NULL,
     res_id CHAR(9) NOT NULL,
     fee DECIMAL(6,2) NOT NULL,
     instructions VARCHAR(100),
@@ -176,5 +176,3 @@ INSERT INTO review VALUES
 'Amy', 'It tastes fantastic', 'image 1'),
 ('333333333','123456789',5,'2022-12-30 11:00:00', 
 'Bob', 'I like the rainbow flavor', 'image 2');
-
-
