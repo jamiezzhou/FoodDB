@@ -45,7 +45,7 @@ CREATE TABLE fine_dinning(
     id CHAR(9) NOT NULL,
     dressing_req VARCHAR(50),
     parking BOOLEAN NOT NULL DEFAULT (false),
-    avail_seats INT NOT NULL,
+    avail_seats INT NOT NULL DEFAULT (500),
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES restaurant(id)
     ON DELETE CASCADE ON UPDATE CASCADE
@@ -94,6 +94,9 @@ CREATE TABLE user(
     CONSTRAINT username_phone UNIQUE (username, phone),
     CHECK (CHAR_LENGTH(password) > 5 and CHAR_LENGTH(password) < 20 and CHAR_LENGTH(phone) = 10)
 );
+INSERT INTO user VALUES
+('Amy','00000000',DEFAULT, 'amy@gmail.com',1234567890),
+('Bob','00000000',DEFAULT, 'bob@gmail.com',1234567890);
 
 CREATE TABLE payment(
     username VARCHAR(20) NOT NULL,
@@ -101,8 +104,7 @@ CREATE TABLE payment(
     security_num CHAR(3) NOT NULL,
     expir_date CHAR(5) NOT NULL,
     PRIMARY KEY (username, card_num),
-    FOREIGN KEY (username) REFERENCES user(username)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (username) REFERENCES user(username) ON DELETE CASCADE ON UPDATE CASCADE,
     CHECK (CHAR_LENGTH(card_num) = 16 and CHAR_LENGTH(security_num) = 3 and CHAR_LENGTH(expir_date) = 5)
 );
 
@@ -136,12 +138,10 @@ CREATE TABLE delivery_food(
 CREATE TABLE reservation(
     reserv_num CHAR(9) NOT NULL,
     res_id CHAR(9) NOT NULL,
-    res_name VARCHAR(20) NOT NULL,
-    res_address VARCHAR(100) NOT NULL,
     reserv_name VARCHAR(20) NOT NULL,
-    num_of_people INT NOT NULL,
     reserv_contact CHAR(10) NOT NULL,
     reserv_time DATETIME NOT NULL,
+    special_request VARCHAR(20),
     PRIMARY KEY (reserv_num),
     FOREIGN KEY (res_id) REFERENCES restaurant(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -149,19 +149,16 @@ CREATE TABLE reservation(
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE reservation_request(
-    reserv_num CHAR(9) NOT NULL,
-    special_request VARCHAR(20),
-    PRIMARY KEY (reserv_num,special_request),
-    FOREIGN KEY (reserv_num) REFERENCES reservation(reserv_num)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CREATE TABLE reservation_request(
+--     reserv_num CHAR(9) NOT NULL,
+--     PRIMARY KEY (reserv_num,special_request),
+--     FOREIGN KEY (reserv_num) REFERENCES reservation(reserv_num)
+--     ON DELETE CASCADE ON UPDATE CASCADE
+-- );
 
 CREATE TABLE review(
     review_num CHAR(9) NOT NULL,
     res_id CHAR(9) NOT NULL,
-    res_name VARCHAR(20) NOT NULL,
-    res_address VARCHAR(100) NOT NULL,
     rating INT NOT NULL,
     review_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     reviewer VARCHAR(20) NOT NULL,
@@ -173,4 +170,11 @@ CREATE TABLE review(
     FOREIGN KEY (reviewer) REFERENCES user(username)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+INSERT INTO review VALUES
+('222222222','123456789',4,'2020-11-30 10:59:00', 
+'Amy', 'It tastes fantastic', 'image 1'),
+('333333333','123456789',5,'2022-12-30 11:00:00', 
+'Bob', 'I like the rainbow flavor', 'image 2');
+
 
