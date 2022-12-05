@@ -65,9 +65,9 @@ app.post("/deliveryconfirm", function (req, res) {
     // });
 
     // function setValue(n, a) {
-        // delivery.res_name = n
-        // delivery.res_address = a;
-        // console.log(delivery);
+    // delivery.res_name = n
+    // delivery.res_address = a;
+    // console.log(delivery);
 
     f1 = req.body.food1;
     f2 = req.body.food2;
@@ -102,7 +102,7 @@ app.post("/deliveryrequest", function (req, res) {
                 res.render("display", { data: "Delivery created. Delivery ID: " + delivery.dlvy_num });
             }
             else if (error.code === 1062) {
-                res.render("display", {data: "Delivery failed, please request the delivery again"});
+                res.render("display", { data: "Delivery failed, please request the delivery again" });
             }
             else {
                 throw error;
@@ -132,28 +132,28 @@ app.post("/insert", function (req, res) {
     const userKeyRegExp = /^([0-9]{2}\-[0-9]{2})$/;
 
     if (user.password != req.body.confirmpass) {
-        res.render("display", {data: "Password don't match."});
+        res.render("display", { data: "Password don't match." });
     }
     else if (user.password.length < 6 || user.password.length > 19) {
-        res.render("display", {data: "Please input a password that is 5-20 characters long"});
+        res.render("display", { data: "Please input a password that is 5-20 characters long" });
     }
     else if (user.phone.length != 10) {
-        res.render("display", {data: "Please input a proper phone number."});
+        res.render("display", { data: "Please input a proper phone number." });
     }
     else if (user.username == "" || user.password == "" || user.phone == "") {
-        res.render("display", {data: "Plese do not leave required fields (*) blanck"});
+        res.render("display", { data: "Plese do not leave required fields (*) blanck" });
     }
     else if (payment.card_num != "" && payment.card_num.length != 16) {
-        res.render("display", {data: "Please input a proper card number."});
+        res.render("display", { data: "Please input a proper card number." });
     }
     else if (payment.card_num != "" && payment.security_num.length != 3) {
-        res.render("display", {data: "Please input a proper securitynum."});
+        res.render("display", { data: "Please input a proper securitynum." });
     }
     else if (payment.card_num != "" && !userKeyRegExp.test(payment.expir_date)) {
-        res.render("display", {data: "Please input the expiration date in the format Month-Year, e.g. 01-22"});
+        res.render("display", { data: "Please input the expiration date in the format Month-Year, e.g. 01-22" });
     }
     else if (payment.card_num != "" && (payment.expir_date == "" || payment.security_num == "")) {
-        res.render("display", {data: "Plese do not leave security num or expiration date blank"});
+        res.render("display", { data: "Plese do not leave security num or expiration date blank" });
     }
     else {
         connection.query(insert_user, user, function (error, result) {
@@ -162,12 +162,12 @@ app.post("/insert", function (req, res) {
                 // valid = true;
                 console.log("Valid user added");
                 if (payment.card_num == "") {
-                    res.render("display", {data: "User Successfully logged in, return to the user page and proceed to the home page"});
+                    res.render("display", { data: "User Successfully logged in, return to the user page and proceed to the home page" });
                     // res.redirect("/homepage");
                 }
             }
             else if (error.errno == 1062) {
-                res.render("display", {data: "Username taken"});
+                res.render("display", { data: "Username taken" });
             } else {
                 throw error;
             }
@@ -178,10 +178,10 @@ app.post("/insert", function (req, res) {
                 console.log(error);
                 if (!error) {
                     console.log("Payment added to user");
-                    res.render("display", {data: "User Successfully logged in, return to the user page and proceed to the home page"});
+                    res.render("display", { data: "User Successfully logged in, return to the user page and proceed to the home page" });
                 }
                 else if (error.errno == 1062) {
-                    res.render("display", {data: "Payment previously added"});
+                    res.render("display", { data: "Payment previously added" });
                 } else {
                     throw error;
                 }
@@ -198,15 +198,15 @@ app.post("/delete", function (req, res) {
     var delete_user = 'DELETE FROM user WHERE username = ?';
 
     if (req.body.password == "") {
-        res.render("display", {data: "Type DELETE in the password field to confirm deletion"});
+        res.render("display", { data: "Type DELETE in the password field to confirm deletion" });
     }
     else if (req.body.password == "DELETE") {
         connection.query(delete_user, username, function (error, result) {
             if (error) throw error;
-            res.render("display", {data: "User deleted."});
+            res.render("display", { data: "User deleted." });
         });
     }
-    else{
+    else {
         console.log("Error");
     }
 });
@@ -219,30 +219,30 @@ app.post("/update", function (req, res) {
     u = req.body.username;
 
     if (u == "") {
-        res.render("display", {data: "Please input the username you would like to update"});
+        res.render("display", { data: "Please input the username you would like to update" });
     }
-    else if( req.body.password == "" && req.body.email == "" && req.body.phone == ""){
-        res.render("display", {data: "Please input the password/email/phone number you would like to update"});
+    else if (req.body.password == "" && req.body.email == "" && req.body.phone == "") {
+        res.render("display", { data: "Please input the password/email/phone number you would like to update" });
     }
-    else{
+    else {
         if (req.body.password != "") {
             connection.query(update_pass, [req.body.password, u], function (error, result) {
                 if (error) throw error;
-                res.render("display", {data: "Password updated"});
+                res.render("display", { data: "Password updated" });
             });
         }
 
         if (req.body.email != "") {
             connection.query(update_email, [req.body.email, u], function (error, result) {
                 if (error) throw error;
-                res.render("display", {data: "Email updated"});
+                res.render("display", { data: "Email updated" });
             });
         }
 
         if (req.body.phone != "") {
             connection.query(update_phone, [req.body.phone, u], function (error, result) {
                 if (error) throw error;
-                res.render("display", {data: "Phone updated"});
+                res.render("display", { data: "Phone updated" });
             });
         }
     }
@@ -252,7 +252,7 @@ app.post("/check-reserve", function (req, res) {
     var reserv_num = req.body.reservID;
 
     if (reserv_num == "" || reserv_num.length != 9) {
-        res.render("display", {data: "Please input a valid reservation number"});
+        res.render("display", { data: "Please input a valid reservation number" });
     }
     // use join
     var get_resv = 'SELECT reserv_num, reserv_name, res_id, name, reserv_time, address, website\
@@ -260,15 +260,17 @@ app.post("/check-reserve", function (req, res) {
                     WHERE R2.reserv_num = ? and R1.id = R2.res_id';
     connection.query(get_resv, reserv_num, function (error, result) {
         if (error) throw error;
-        else if (result.length === 0) res.render("display", {data: 'No Reservation Found'});
+        else if (result.length === 0) res.render("display", { data: 'No Reservation Found' });
         // else res.send(result[0]);
-        else res.render("display", {data: 'Reservation Number: ' + result[0].reserv_num +
-            '\nHost Name: ' + result[0].reserv_name +
-            '\nRestaurant ID:  ' + result[0].res_id +
-            '\nRestaurant Name: ' + result[0].name +
-            '\nReservation Time: ' + result[0].name +
-            '\nAddress: ' + result[0].address +
-            '\nWebsite: ' + result[0].website});
+        else res.render("display", {
+            data: 'Reservation Number: ' + result[0].reserv_num +
+                '\nHost Name: ' + result[0].reserv_name +
+                '\nRestaurant ID:  ' + result[0].res_id +
+                '\nRestaurant Name: ' + result[0].name +
+                '\nReservation Time: ' + result[0].name +
+                '\nAddress: ' + result[0].address +
+                '\nWebsite: ' + result[0].website
+        });
     });
 
 });
@@ -288,10 +290,10 @@ app.post("/make-reserve", function (req, res) {
     var insert_resv = 'INSERT INTO reservation SET ?';
 
     if (usr_reservation.reserv_name == "" || usr_reservation.reserv_time == "" || usr_reservation.res_id == "") {
-        res.render("display", {data: "Please do not leave fields blank"});
+        res.render("display", { data: "Please do not leave fields blank" });
     }
     else if (usr_reservation.reserv_contact.length != 10) {
-        res.render("display", {data: "Please input a proper phone number."});
+        res.render("display", { data: "Please input a proper phone number." });
     }
 
     else {
@@ -302,7 +304,7 @@ app.post("/make-reserve", function (req, res) {
                 res.render("display", { data: "Reservation created. Reservation ID: " + resvID });
             }
             else if (err.code === 1062) {
-                res.render("display", {data: "Reservation failed, please request the reservation again"});
+                res.render("display", { data: "Reservation failed, please request the reservation again" });
             }
             // hasn't dealt with wrong restaurant ID
             else {
@@ -318,7 +320,7 @@ app.post("/search-review", function (req, res) {
     var id = req.body.restid;
 
     if (id.length != 9) {
-        res.render("display", {data: "Please input a valid reservation number"});
+        res.render("display", { data: "Please input a valid reservation number" });
     }
     // use join
     var get_resv = 'SELECT res_id, name, address, rating, review_date, reviewer, content, review_date\
@@ -328,7 +330,7 @@ app.post("/search-review", function (req, res) {
 
     connection.query(get_resv, id, function (error, result) {
         if (error) throw error;
-        else if (result.length === 0) res.render("display", {data: 'No Restaurant Found'});
+        else if (result.length === 0) res.render("display", { data: 'No Restaurant Found' });
         else {
             var num_review = result.length;
             var result_str = '';
