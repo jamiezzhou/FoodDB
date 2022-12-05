@@ -25,7 +25,11 @@ INSERT INTO restaurant VALUES
 (323456789, "Jenis3", "3", "web3", NULL,
     "menu3","9:00","6:00",3234567890,NULL),
 (423456789, "Jenis4", "4", "web4", NULL,
-    "menu4","9:00","6:00",4234567890,NULL);
+    "menu4","9:00","6:00",4234567890,NULL),
+(523456789, "Jenis5", "5", "web5", NULL,
+    "menu5","9:00","6:00",5234567890,NULL),
+(623456789, "Jenis6", "6", "web6", NULL,
+    "menu6","9:00","6:00",6234567890,NULL);
 
 
 CREATE TABLE convenience_food(
@@ -39,7 +43,8 @@ CREATE TABLE convenience_food(
 
 INSERT INTO convenience_food(id) VALUES
 (123456789), 
-(223456789);
+(223456789),
+(523456789);
 
 CREATE TABLE fine_dinning(
     id CHAR(9) NOT NULL,
@@ -63,7 +68,8 @@ CREATE TABLE snacks_and_drinks(
 );
 
 INSERT INTO snacks_and_drinks(id) VALUES
-(423456789);
+(423456789),
+(623456789);
 
 CREATE TABLE food(
     res_id CHAR(9) NOT NULL,
@@ -81,7 +87,14 @@ INSERT INTO food VALUES
 (123456789, 123456788, "grape", NULL, 30.1),
 (223456789, 123456789, "pear", NULL, 30.1),
 (323456789, 123456789, "apple3", NULL, 30.1),
-(423456789, 123456789, "apple4", NULL, 30.1);
+(423456789, 123456789, "apple4", NULL, 30.1),
+(423456789, 123456788, "pear4", NULL, 30.1),
+(423456789, 123456787, "grape4", NULL, 30.1),
+(423456789, 123456786, "banana4", NULL, 30.1),
+(523456789, 123456789, "apple5", NULL, 30.1),
+(523456789, 123456788, "grape5", NULL, 30.1),
+(623456789, 123456789, "apple6", NULL, 30.1);
+
 
 
 CREATE TABLE user(
@@ -96,7 +109,8 @@ CREATE TABLE user(
 );
 INSERT INTO user VALUES
 ('Amy','00000000',DEFAULT, 'amy@gmail.com',1234567890),
-('Bob','00000000',DEFAULT, 'bob@gmail.com',1234567890);
+('Bob','00000000',DEFAULT, 'bob@gmail.com',1234567890),
+('Alice','00000000',DEFAULT, 'alice@gmail.com',1234567890);
 
 CREATE TABLE payment(
     username VARCHAR(20) NOT NULL,
@@ -168,7 +182,15 @@ INSERT INTO review VALUES
 ('222222222','123456789',4,'2020-11-30 10:59:00', 
 'Amy', 'It tastes fantastic', 'image 1'),
 ('333333333','123456789',5,'2022-12-30 11:00:00', 
-'Bob', 'I like the rainbow flavor', 'image 2');
+'Bob', 'I like the rainbow flavor', 'image 2'),
+('444444444','223456789',2,'2022-12-30 11:00:00', 
+'Bob', 'I hate the taste', 'image 4'),
+('555555555','323456789',1,'2022-12-30 11:00:00', 
+'Alice', 'I don"t like the rainbow flavor', 'image 5'),
+('666666666','323456789',2,'2022-12-30 11:00:00', 
+'Bob', 'Hate it', 'image 6'),
+('777777777','323456789',3,'2022-12-30 11:00:00', 
+'Amy', 'Hate it, actually no', 'image 7');
 
 UPDATE restaurant SET num_of_reviewers = (SELECT COUNT(*) FROM review WHERE  restaurant.id = review.res_id);
 UPDATE restaurant SET avg_rating = (SELECT AVG(rating) FROM review WHERE restaurant.id = review.res_id);
