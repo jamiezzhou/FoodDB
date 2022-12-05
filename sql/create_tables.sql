@@ -43,7 +43,7 @@ INSERT INTO convenience_food(id) VALUES
 
 CREATE TABLE fine_dinning(
     id CHAR(9) NOT NULL,
-    dressing_req VARCHAR(50),
+    dressing_req VARCHAR(50) DEFAULT "Formal Dressing",
     parking BOOLEAN NOT NULL DEFAULT (false),
     avail_seats INT NOT NULL DEFAULT (500),
     PRIMARY KEY (id),
@@ -56,7 +56,7 @@ INSERT INTO fine_dinning(id) VALUES
 
 CREATE TABLE snacks_and_drinks(
     id CHAR(9) NOT NULL,
-    group_order BOOLEAN DEFAULT (false) NOT NULL,
+    group_order BOOLEAN NOT NULL DEFAULT (false),
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES restaurant(id)
     ON DELETE CASCADE ON UPDATE CASCADE
@@ -149,13 +149,6 @@ CREATE TABLE reservation(
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- CREATE TABLE reservation_request(
---     reserv_num CHAR(9) NOT NULL,
---     PRIMARY KEY (reserv_num,special_request),
---     FOREIGN KEY (reserv_num) REFERENCES reservation(reserv_num)
---     ON DELETE CASCADE ON UPDATE CASCADE
--- );
-
 CREATE TABLE review(
     review_num CHAR(9) NOT NULL,
     res_id CHAR(9) NOT NULL,
@@ -176,3 +169,6 @@ INSERT INTO review VALUES
 'Amy', 'It tastes fantastic', 'image 1'),
 ('333333333','123456789',5,'2022-12-30 11:00:00', 
 'Bob', 'I like the rainbow flavor', 'image 2');
+
+UPDATE restaurant SET num_of_reviewers = (SELECT COUNT(*) FROM review WHERE  restaurant.id = review.res_id);
+UPDATE restaurant SET avg_rating = (SELECT AVG(rating) FROM review WHERE restaurant.id = review.res_id);

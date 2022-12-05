@@ -12,9 +12,8 @@ var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     database: "dbProject",
-    password: "zhou123456"
+    password: "Julia412"
 });
-
 
 app.get("/", function (req, res) {
     res.render("account");
@@ -276,6 +275,21 @@ app.post("/check-reserve", function (req, res) {
 
 });
 
+app.post("/cancel-reserve", function (req, res) {
+    var reservation_id = req.body.cancelID;
+    var delete_reservation = 'DELETE FROM reservation WHERE reserv_num = ?';
+
+    if (req.body.cancelID == "") {
+        res.render("display", {data: "Enter the restaruant ID you would like to delete"});
+    }
+    else {
+        connection.query(delete_reservation, reservation_id, function (error, result) {
+            if (error) throw error;
+            res.render("display", {data: "Reservation cancelled."});
+        });
+    }
+});
+
 app.post("/make-reserve", function (req, res) {
     // if(post.submit){
     const resvID = Math.floor(Math.random() * 1000000000);
@@ -290,7 +304,7 @@ app.post("/make-reserve", function (req, res) {
     };
     var insert_resv = 'INSERT INTO reservation SET ?';
 
-    if (usr_reservation.reserv_name === "" || usr_reservation.reserv_time == "" || usr_reservation.res_id == "") {
+    if (usr_reservation.reserv_name == "" || usr_reservation.reserv_time == "" || usr_reservation.res_id == "") {
         res.render("display", { data: "Please do not leave fields blank" });
     }
     else if (usr_reservation.reserv_contact.length != 10) {
@@ -371,7 +385,7 @@ app.post("/search", function (req, res) {
                         '\nAverage rating: ' + result[i].avg_rating +
                         '\nMenu: ' + result[i].menu +
                         '\nOpen time: ' + result[i].open_time
-                    '\nEnd time: ' + result[i].end_time +
+                        '\nEnd time: ' + result[i].end_time +
                         '\nPhone: ' + result[i].phone +
                         '\nNumber of Reviewers ' + result[i].num_of_reviewers + '\n\n';
                     result_str += str;
@@ -396,8 +410,8 @@ app.post("/search", function (req, res) {
                         '\nWebsite: ' + result[i].website +
                         '\nAverage rating: ' + result[i].avg_rating +
                         '\nMenu: ' + result[i].menu +
-                        '\nOpen time: ' + result[i].open_time
-                    '\nEnd time: ' + result[i].end_time +
+                        '\nOpen time: ' + result[i].open_time +
+                        '\nEnd time: ' + result[i].end_time +
                         '\nPhone: ' + result[i].phone +
                         '\nNumber of Reviewers: ' + result[i].num_of_reviewers +
                         '\nDressing Requirements: ' + result[i].dressing_req +
@@ -410,7 +424,7 @@ app.post("/search", function (req, res) {
         });
     }
     else if (type === 'S') {
-        var get_res = 'SELECT * FROM restaurant R, fine_dinning F WHERE R.id = F.id';
+        var get_res = 'SELECT * FROM restaurant R, snacks_and_drinks S WHERE R.id = S.id';
         connection.query(get_res, restaurant, function (error, result) {
             if (error) throw error;
             else {
@@ -428,7 +442,7 @@ app.post("/search", function (req, res) {
                         '\nEnd time: ' + result[i].end_time +
                         '\nPhone: ' + result[i].phone +
                         '\nNumber of Reviewers: ' + result[i].num_of_reviewers +
-                        '\nGroup order allowed: ' + result[i].dressing_req + '\n\n';
+                        '\nGroup order allowed: ' + result[i].group_order + '\n\n';
                     result_str += str;
                 }
                 res.render("display", { data: result_str });
@@ -436,7 +450,7 @@ app.post("/search", function (req, res) {
         });
     }
     else if (type === 'C') {
-        var get_res = 'SELECT * FROM restaurant R, fine_dinning F WHERE R.id = F.id';
+        var get_res = 'SELECT * FROM restaurant R, convenience_food C WHERE R.id = C.id';
         connection.query(get_res, restaurant, function (error, result) {
             if (error) throw error;
             else {
@@ -450,11 +464,11 @@ app.post("/search", function (req, res) {
                         '\nWebsite: ' + result[i].website +
                         '\nAverage rating: ' + result[i].avg_rating +
                         '\nMenu: ' + result[i].menu +
-                        '\nOpen time: ' + result[i].open_time
-                    '\nEnd time: ' + result[i].end_time +
+                        '\nOpen time: ' + result[i].open_time +
+                        '\nEnd time: ' + result[i].end_time +
                         '\nPhone: ' + result[i].phone +
                         '\nNumber of Reviewers: ' + result[i].num_of_reviewers +
-                        '\nDressing Requirements: ' + result[i].drive_through +
+                        '\nDrive Through: ' + result[i].drive_through +
                         '\nParking: ' + result[i].parking + '\n\n';
                     result_str += str;
                 }
@@ -464,7 +478,6 @@ app.post("/search", function (req, res) {
     }
 
 });
-
 
 app.get("/display", function (req, res) {
     res.render("display");

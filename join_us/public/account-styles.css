@@ -61,6 +61,7 @@ body {
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1rem;
+  background-image: url(pexels-emre-can-acer-2079438.jpg);
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
@@ -9832,6 +9833,7 @@ body {
   background: #fafafa;
   color: gray;
 }
+
 a {
   -webkit-transition: 0.3s all ease;
   -o-transition: 0.3s all ease;
